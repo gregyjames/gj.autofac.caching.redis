@@ -8,6 +8,13 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Title>autofac.caching.redis</Title>
         <Authors>Greg James</Authors>
+        <Copyright>2024, Greg James</Copyright>
+        <Description>Automatic function level caching using redis in C#.</Description>
+        <RepositoryUrl>https://github.com/gregyjames/autofac.caching.redis</RepositoryUrl>
+        <PackageTags>c-sharp redis cache caching functions async</PackageTags>
+        <AssemblyVersion>1.0.0</AssemblyVersion>
+        <AssemblyName>autofac.caching.redis</AssemblyName>
+        <RootNamespace>autofac.caching.redis</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
