@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\autofac.caching.redis\autofac.caching.redis.csproj" />
+      <ProjectReference Include="..\gj.autofac.caching.redis\gj.autofac.caching.redis.csproj" />
     </ItemGroup>
 
     <ItemGroup>
