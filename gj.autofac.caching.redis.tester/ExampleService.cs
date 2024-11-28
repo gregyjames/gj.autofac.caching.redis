@@ -4,7 +4,6 @@ using RedisCacheTester;
 
 public class ExampleService : IExampleService
 {
-    
     public async Task<int[]> AsyncFunctionTest(int id)
     {
         await Task.Delay(5000);

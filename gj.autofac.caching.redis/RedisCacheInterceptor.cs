@@ -61,7 +61,6 @@ public class RedisCacheInterceptor(ILogger<RedisCacheInterceptor> logger) : IInt
     
     public void Intercept(IInvocation invocation)
     {
-        
         var cacheAttribute = invocation.Method.GetCustomAttributes(typeof(RedisCacheAttribute), true)
             .FirstOrDefault() as RedisCacheAttribute;
 
