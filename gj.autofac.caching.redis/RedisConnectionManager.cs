@@ -1,20 +1,25 @@
-﻿using StackExchange.Redis;
+﻿using Castle.Core.Configuration;
+using Microsoft.Extensions.Configuration;
+using StackExchange.Redis;
 
 namespace gj.autofac.caching.redis;
 
-public static class RedisConnectionManager
+public class RedisConnectionManager
 {
-    public static int DataBaseId { get; set; }= -1;
-    public static int Port { get; set; } = 6379;
-    public static string? Password { get; set; }
-    public static string Host { get; set; } = "localhost";
-    private static readonly Lazy<ConnectionMultiplexer> LazyConnection = new(() =>
+    public RedisConfig Config { get; set; } = new();
+    public RedisConnectionManager(Microsoft.Extensions.Configuration.IConfiguration configuration)
     {
-        var connectionString = !string.IsNullOrEmpty(Password) ? $"{Host}:{Port},password={Password}" : $"{Host}:{Port}";
-        return ConnectionMultiplexer.Connect(connectionString);
-    });
-
-    public static ConnectionMultiplexer Connection => LazyConnection.Value;
+        LazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+        {
+            var connectionString = !string.IsNullOrEmpty(Config.Password) ? $"{Config.Host}:{Config.Port},password={Config.Password}" : $"{Config.Host}:{Config.Port}";
+            return ConnectionMultiplexer.Connect(connectionString);
+        });
+        configuration.GetSection("Redis").Bind(Config);
+    }
     
-    public static IDatabase Database => LazyConnection.Value.GetDatabase(DataBaseId);
+    private readonly Lazy<ConnectionMultiplexer> LazyConnection;
+
+    public ConnectionMultiplexer Connection => LazyConnection.Value;
+    
+    public IDatabase Database => LazyConnection.Value.GetDatabase(Config.DataBaseId);
 }

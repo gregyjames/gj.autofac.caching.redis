@@ -2,6 +2,7 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Autofac.Extras.DynamicProxy;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -20,8 +21,10 @@ static class Program
     }
     static Task Main()
     {
-        RedisConnectionManager.Host = "192.168.0.47";
-        RedisConnectionManager.Port = 6379;
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(AppContext.BaseDirectory) // Base directory for appsettings.json
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .Build();
 
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Verbose()
@@ -37,7 +40,11 @@ static class Program
         
         var builder = new ContainerBuilder();
        
+        services.AddSingleton<IConfiguration>(configuration);
+        
         builder.Populate(services);
+
+        builder.RegisterType<RedisConnectionManager>().SingleInstance();
         
         builder.RegisterType<RedisCacheInterceptor>();
         
@@ -49,17 +56,17 @@ static class Program
         var container = builder.Build();
         var service = container.Resolve<IExampleService>();
 
-        int id = 3;
+        var id = 3;
 
-        for (int i = 0; i < 5; i++)
+        for (var i = 0; i < 5; i++)
         {
             TimeAndRun(async () => await service.AsyncFunctionTest(id));
         }
-        for (int i = 0; i < 5; i++)
+        for (var i = 0; i < 5; i++)
         {
             TimeAndRun(async () => await service.AsyncActionTest(50));
         }
-        for (int i = 0; i < 5; i++)
+        for (var i = 0; i < 5; i++)
         {
             TimeAndRun(() => service.SynchronousTaskTest());
         }
