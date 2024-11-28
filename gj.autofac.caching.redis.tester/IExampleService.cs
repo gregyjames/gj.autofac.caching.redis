@@ -1,16 +1,12 @@
-using gj.autofac.caching.redis;
-
-namespace RedisCacheTester;
-
-using System.Threading.Tasks;
+namespace gj.autofac.caching.redis.tester;
 
 public interface IExampleService
 {
-    [RedisCache(60)]
+    [RedisCache(120)]
     Task<int[]> AsyncFunctionTest(int id);
     
-    [RedisCache(60)]
+    [RedisCache(120)]
     Task AsyncActionTest(int id);
-    [RedisCache(60)]
+    [RedisCache(120)]
     int SynchronousTaskTest();
 }

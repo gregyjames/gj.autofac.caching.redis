@@ -2,12 +2,12 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Autofac.Extras.DynamicProxy;
-using gj.autofac.caching.redis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using RedisCacheTester;
 using Serilog;
 using Serilog.Events;
+
+namespace gj.autofac.caching.redis.tester;
 
 static class Program
 {
@@ -18,7 +18,7 @@ static class Program
         start.Stop();
         Console.WriteLine(start.Elapsed.TotalMilliseconds);
     }
-    static async Task Main()
+    static Task Main()
     {
         RedisConnectionManager.Host = "192.168.0.47";
         RedisConnectionManager.Port = 6379;
@@ -63,5 +63,7 @@ static class Program
         {
             TimeAndRun(() => service.SynchronousTaskTest());
         }
+
+        return Task.CompletedTask;
     }
 }

@@ -2,14 +2,14 @@ using MessagePack;
 
 namespace gj.autofac.caching.redis;
 
-public static class BinaryFormatterUtils
+internal static class BinaryFormatterUtils
 {
     /// <summary>
     /// Serializes an object to binary using MessagePack.
     /// </summary>
     /// <param name="obj">The object to serialize.</param>
     /// <returns>The binary representation of the object.</returns>
-    public static byte[] SerializeToBinary(object obj)
+    internal static byte[] SerializeToBinary(object? obj)
     {
         if (obj == null)
         {
@@ -26,7 +26,7 @@ public static class BinaryFormatterUtils
     /// <param name="binaryData">The binary data to deserialize.</param>
     /// <param name="type">The type to deserialize into.</param>
     /// <returns>The deserialized object.</returns>
-    public static object DeserializeFromBinary(byte[] binaryData, Type type)
+    internal static object? DeserializeFromBinary(byte[] binaryData, Type type)
     {
         if (binaryData == null || binaryData.Length == 0)
         {

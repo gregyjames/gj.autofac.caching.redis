@@ -1,6 +1,4 @@
-using System.Threading.Tasks;
-using gj.autofac.caching.redis;
-using RedisCacheTester;
+namespace gj.autofac.caching.redis.tester;
 
 public class ExampleService : IExampleService
 {

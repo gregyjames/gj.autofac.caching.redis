@@ -11,8 +11,8 @@ public class RedisCacheInterceptor(ILogger<RedisCacheInterceptor> logger) : IInt
 
     private static string GenerateCacheKey(MethodInfo method, object[] args)
     {
-        var argsKey = string.Join(",", args.Select(a => a?.ToString() ?? "null"));
-        return $"{method.DeclaringType.FullName}.{method.Name}({argsKey})";
+        var argsKey = string.Join(",", args.Select(a => a.ToString() ?? "null"));
+        return $"{method.DeclaringType?.FullName}.{method.Name}({argsKey})";
     }
 
     private Type GetReturnType(IInvocation invocation)
@@ -40,20 +40,14 @@ public class RedisCacheInterceptor(ILogger<RedisCacheInterceptor> logger) : IInt
         return MethodType.Synchronous;
     }
     
-    private enum MethodType
-    {
-        Synchronous,
-        AsyncAction,
-        AsyncFunction
-    }
-    
-    private static readonly MethodInfo HandleAsyncMethodInfo = typeof(RedisCacheInterceptor).GetMethod("HandleAsyncWithResult", BindingFlags.Instance | BindingFlags.NonPublic);
+    private static readonly MethodInfo? HandleAsyncMethodInfo = typeof(RedisCacheInterceptor).GetMethod("HandleAsyncWithResult", BindingFlags.Instance | BindingFlags.NonPublic);
     
     private async Task HandleAsync(Task task)
     {
         await task;
     }
 
+    // ReSharper disable once UnusedMember.Local
     private async Task<T> HandleAsyncWithResult<T>(Task<T> task)
     {
         return await task;
@@ -71,7 +65,7 @@ public class RedisCacheInterceptor(ILogger<RedisCacheInterceptor> logger) : IInt
             return;
         }
 
-        var cacheKey = GenerateCacheKey(invocation.Method, invocation.Arguments);
+        var cacheKey = string.IsNullOrEmpty(cacheAttribute.Key) ? GenerateCacheKey(invocation.Method, invocation.Arguments) : cacheAttribute.Key;
         var cachedValue = _redis.StringGet(cacheKey);
 
         if (cachedValue.HasValue)
@@ -105,7 +99,7 @@ public class RedisCacheInterceptor(ILogger<RedisCacheInterceptor> logger) : IInt
     private static void SetReturnValue(IInvocation invocation, RedisValue cachedValue, Type returnType)
     {
         // Deserialize using the provided returnType
-        var value = BinaryFormatterUtils.DeserializeFromBinary(cachedValue, returnType);
+        var value = BinaryFormatterUtils.DeserializeFromBinary(cachedValue!, returnType);
 
         if (typeof(Task).IsAssignableFrom(invocation.Method.ReturnType))
         {
@@ -139,20 +133,24 @@ public class RedisCacheInterceptor(ILogger<RedisCacheInterceptor> logger) : IInt
         invocation.Proceed();
 
         var resultType = invocation.Method.ReturnType.GetGenericArguments()[0];
-        var mi = HandleAsyncMethodInfo.MakeGenericMethod(resultType);
-        var value = mi.Invoke(this, new[] { invocation.ReturnValue });
-        
-        var task = (Task)value;
-        await task.ConfigureAwait(false);
-        
-        var resultProperty = task.GetType().GetProperty("Result");
-        var taskValue = resultProperty?.GetValue(task);
-        
-        var serializedValue = BinaryFormatterUtils.SerializeToBinary(taskValue);
-        await _redis.StringSetAsync(cacheKey, serializedValue, TimeSpan.FromSeconds(expirationSeconds));
-        
-        logger.LogDebug("[CACHE SET] {0}", cacheKey);
-        invocation.ReturnValue = value;
+        var mi = HandleAsyncMethodInfo?.MakeGenericMethod(resultType);
+        var value = mi?.Invoke(this, new[] { invocation.ReturnValue });
+
+        if (value != null)
+        {
+            var task = (Task)value;
+            
+            await task.ConfigureAwait(false);
+
+            var resultProperty = task.GetType().GetProperty("Result");
+            var taskValue = resultProperty?.GetValue(task);
+
+            var serializedValue = BinaryFormatterUtils.SerializeToBinary(taskValue);
+            await _redis.StringSetAsync(cacheKey, serializedValue, TimeSpan.FromSeconds(expirationSeconds));
+
+            logger.LogDebug("[CACHE SET] {0}", cacheKey);
+            invocation.ReturnValue = value;
+        }
 
         return value;
     }
