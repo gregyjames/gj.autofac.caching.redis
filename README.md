@@ -1,6 +1,8 @@
 [![.NET](https://github.com/gregyjames/gj.autofac.caching.redis/actions/workflows/dotnetci.yml/badge.svg)](https://github.com/gregyjames/gj.autofac.caching.redis/actions/workflows/dotnetci.yml)
 [![NuGet latest version](https://badgen.net/nuget/v/gj.autofac.caching.redis)](https://www.nuget.org/packages/gj.autofac.caching.redis)
 ![NuGet Downloads](https://img.shields.io/nuget/dt/gj.autofac.caching.redis)
+[![CodeFactor](https://www.codefactor.io/repository/github/gregyjames/gj.autofac.caching.redis/badge)](https://www.codefactor.io/repository/github/gregyjames/gj.autofac.caching.redis)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/507a5bc2dc4949318051b82aae00b838)](https://app.codacy.com/gh/gregyjames/gj.autofac.caching.redis/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 # autofac.caching.redis
 Automatic function level caching using redis in C#.
