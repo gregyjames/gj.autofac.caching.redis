@@ -33,9 +33,9 @@ jobs:
       uses: NuGet/setup-nuget@v1.0.5
     - name: Restore NuGet
       if: steps.cacheStep.outputs.cache-hit != 'true'
-      run: nuget restore autofac.caching.redis.sln
+      run: nuget restore gj.autofac.caching.redis.sln
     - name: Build
-      run: dotnet build autofac.caching.redis/autofac.caching.redis.csproj --no-restore --configuration Release /p:Version=$Env:VERSION /p:AssemblyVersion=$Env:VERSION
+      run: dotnet build gj.autofac.caching.redis/gj.autofac.caching.redis.csproj --no-restore --configuration Release /p:Version=$Env:VERSION /p:AssemblyVersion=$Env:VERSION
     - name: Publish NuGet package
       run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key $Env:NUGET_API_KEY
       env:
