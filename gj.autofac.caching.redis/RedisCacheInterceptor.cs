@@ -5,9 +5,9 @@ using StackExchange.Redis;
 
 namespace gj.autofac.caching.redis;
 
-public class RedisCacheInterceptor(ILogger<RedisCacheInterceptor> logger) : IInterceptor
+public class RedisCacheInterceptor(ILogger<RedisCacheInterceptor> logger, RedisConnectionManager manager) : IInterceptor
 {
-    private readonly IDatabase _redis = RedisConnectionManager.Database; // Ensure this is properly initialized elsewhere
+    private readonly IDatabase _redis = manager.Database; // Ensure this is properly initialized elsewhere
 
     private static string GenerateCacheKey(MethodInfo method, object[] args)
     {

@@ -2,6 +2,7 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Autofac.Extras.DynamicProxy;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -11,17 +12,19 @@ namespace gj.autofac.caching.redis.tester;
 
 static class Program
 {
-    static void TimeAndRun(Action action)
+    static void TimeAndRun(Action action, Microsoft.Extensions.Logging.ILogger logger)
     {
         var start = Stopwatch.StartNew();
         action.Invoke();
         start.Stop();
-        Console.WriteLine(start.Elapsed.TotalMilliseconds);
+        logger.LogInformation("Time taken: {0}ms", start.Elapsed.TotalMilliseconds);
     }
     static Task Main()
     {
-        RedisConnectionManager.Host = "192.168.0.47";
-        RedisConnectionManager.Port = 6379;
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(AppContext.BaseDirectory) // Base directory for appsettings.json
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .Build();
 
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Verbose()
@@ -37,7 +40,13 @@ static class Program
         
         var builder = new ContainerBuilder();
        
+        //Either make sure IConfiguration or RedisConfig is registered.
+        services.AddSingleton<IConfiguration>(configuration);
+        
         builder.Populate(services);
+
+        //Register the Redis Connection as single instance
+        builder.RegisterType<RedisConnectionManager>().SingleInstance();
         
         builder.RegisterType<RedisCacheInterceptor>();
         
@@ -48,20 +57,21 @@ static class Program
 
         var container = builder.Build();
         var service = container.Resolve<IExampleService>();
+        var logger = container.Resolve<ILogger<ExampleService>>();
+        
+        var id = 3;
 
-        int id = 3;
-
-        for (int i = 0; i < 5; i++)
+        for (var i = 0; i < 5; i++)
         {
-            TimeAndRun(async () => await service.AsyncFunctionTest(id));
+            TimeAndRun(async () => await service.AsyncFunctionTest(id), logger);
         }
-        for (int i = 0; i < 5; i++)
+        for (var i = 0; i < 5; i++)
         {
-            TimeAndRun(async () => await service.AsyncActionTest(50));
+            TimeAndRun(async () => await service.AsyncActionTest(50), logger);
         }
-        for (int i = 0; i < 5; i++)
+        for (var i = 0; i < 5; i++)
         {
-            TimeAndRun(() => service.SynchronousTaskTest());
+            TimeAndRun(() => service.SynchronousTaskTest(), logger);
         }
 
         return Task.CompletedTask;
