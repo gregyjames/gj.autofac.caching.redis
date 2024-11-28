@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using RedisCache;
+using gj.autofac.caching.redis;
 using RedisCacheTester;
 
 public class ExampleService : IExampleService

@@ -3,7 +3,7 @@ using Castle.DynamicProxy;
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 
-namespace RedisCache;
+namespace gj.autofac.caching.redis;
 
 public class RedisCacheInterceptor(ILogger<RedisCacheInterceptor> logger) : IInterceptor
 {

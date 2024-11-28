@@ -1,6 +1,6 @@
 ﻿using StackExchange.Redis;
 
-namespace RedisCache;
+namespace gj.autofac.caching.redis;
 
 public static class RedisConnectionManager
 {

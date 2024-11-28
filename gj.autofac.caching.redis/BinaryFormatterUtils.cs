@@ -1,6 +1,6 @@
 using MessagePack;
 
-namespace RedisCache;
+namespace gj.autofac.caching.redis;
 
 public static class BinaryFormatterUtils
 {

@@ -14,6 +14,9 @@
         <PackageTags>c-sharp redis cache caching functions async</PackageTags>
         <AssemblyVersion>1.0.0</AssemblyVersion>
         <PackageId>gj.autofac.caching.redis</PackageId>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+        <PackageIcon>icons8-redis-an-in-memory-data-structure-project-implementing-a-distributed-96.png</PackageIcon>
     </PropertyGroup>
 
     <ItemGroup>
@@ -21,6 +24,14 @@
       <PackageReference Include="MessagePack" Version="2.5.192" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="StackExchange.Redis" Version="2.8.22" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="docs\README.md" Pack="true" PackagePath="\" />
+        <None Include="docs\LICENSE.md" Pack="true" PackagePath="\" />
+        <None Include="docs\icons8-redis-an-in-memory-data-structure-project-implementing-a-distributed-96.png" Pack="true" PackagePath="\">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

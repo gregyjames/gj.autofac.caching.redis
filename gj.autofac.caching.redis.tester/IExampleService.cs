@@ -1,4 +1,4 @@
-using RedisCache;
+using gj.autofac.caching.redis;
 
 namespace RedisCacheTester;
 

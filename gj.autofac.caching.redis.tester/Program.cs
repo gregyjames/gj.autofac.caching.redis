@@ -2,13 +2,12 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Autofac.Extras.DynamicProxy;
+using gj.autofac.caching.redis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using RedisCache;
+using RedisCacheTester;
 using Serilog;
 using Serilog.Events;
-
-namespace RedisCacheTester;
 
 class Program
 {
