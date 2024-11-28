@@ -1,5 +1,4 @@
-﻿using Castle.Core.Configuration;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
 
 namespace gj.autofac.caching.redis;
@@ -7,9 +6,9 @@ namespace gj.autofac.caching.redis;
 public class RedisConnectionManager
 {
     public RedisConfig Config { get; set; } = new();
-    public RedisConnectionManager(Microsoft.Extensions.Configuration.IConfiguration configuration)
+    public RedisConnectionManager(IConfiguration configuration)
     {
-        LazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+        _lazyConnection = new Lazy<IConnectionMultiplexer>(() =>
         {
             var connectionString = !string.IsNullOrEmpty(Config.Password) ? $"{Config.Host}:{Config.Port},password={Config.Password}" : $"{Config.Host}:{Config.Port}";
             return ConnectionMultiplexer.Connect(connectionString);
@@ -20,15 +19,21 @@ public class RedisConnectionManager
     public RedisConnectionManager(RedisConfig config)
     {
         Config = config;
-        LazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+        _lazyConnection = new Lazy<IConnectionMultiplexer>(() =>
         {
             var connectionString = !string.IsNullOrEmpty(Config.Password) ? $"{Config.Host}:{Config.Port},password={Config.Password}" : $"{Config.Host}:{Config.Port}";
             return ConnectionMultiplexer.Connect(connectionString);
         });
     }
-    private readonly Lazy<ConnectionMultiplexer> LazyConnection;
 
-    public ConnectionMultiplexer Connection => LazyConnection.Value;
+    public RedisConnectionManager(IConnectionMultiplexer connectionMultiplexer)
+    {
+        _lazyConnection = new Lazy<IConnectionMultiplexer>(() => connectionMultiplexer);
+    }
     
-    public IDatabase Database => LazyConnection.Value.GetDatabase(Config.DataBaseId);
+    private readonly Lazy<IConnectionMultiplexer> _lazyConnection;
+
+    public IConnectionMultiplexer Connection => _lazyConnection.Value;
+    
+    public IDatabase Database => _lazyConnection.Value.GetDatabase(Config.DataBaseId);
 }
