@@ -9,7 +9,7 @@ using RedisCacheTester;
 using Serilog;
 using Serilog.Events;
 
-class Program
+static class Program
 {
     static void TimeAndRun(Action action)
     {
@@ -18,7 +18,7 @@ class Program
         start.Stop();
         Console.WriteLine(start.Elapsed.TotalMilliseconds);
     }
-    static async Task Main(string[] args)
+    static async Task Main()
     {
         RedisConnectionManager.Host = "192.168.0.47";
         RedisConnectionManager.Port = 6379;

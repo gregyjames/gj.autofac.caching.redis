@@ -91,6 +91,9 @@ public class RedisCacheInterceptor(ILogger<RedisCacheInterceptor> logger) : IInt
             case MethodType.AsyncFunction:
                 HandleAsyncMethod(invocation, cacheKey, cacheAttribute.DurationSeconds).Wait();
                 break;
+            default:
+                invocation.Proceed();
+                break;
         }
     }
     
@@ -102,7 +105,7 @@ public class RedisCacheInterceptor(ILogger<RedisCacheInterceptor> logger) : IInt
         if (typeof(Task).IsAssignableFrom(invocation.Method.ReturnType))
         {
             // Create a Task<T> for cached async results
-            var taskType = typeof(Task<>).MakeGenericType(returnType);
+            //var taskType = typeof(Task<>).MakeGenericType(returnType);
             var taskFromResultMethod = typeof(Task).GetMethod("FromResult")?.MakeGenericMethod(returnType);
             invocation.ReturnValue = taskFromResultMethod?.Invoke(null, new[] { value });
         }
