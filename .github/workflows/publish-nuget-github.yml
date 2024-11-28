@@ -1,0 +1,36 @@
+name: Publish NuGet Package To Github
+
+on:
+  push:
+    branches:
+      - main  # Adjust the branch name as needed
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.x  # Adjust based on your project's .NET version
+
+      - name: Add source
+        run: dotnet nuget add source --username gregyjames --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/gregyjames/index.json"
+        
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build project
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Pack NuGet package
+        run: dotnet pack --configuration Release --no-build --output ./output
+
+      - name: Publish to GitHub Packages
+        run: dotnet nuget push "./output/*.nupkg" --source "github" --api-key "${{ secrets.GITHUB_TOKEN }}"
+        env:
+          NUGET_CREDENTIALPROVIDER_SESSIONTOKENCACHE_ENABLED: "true"
