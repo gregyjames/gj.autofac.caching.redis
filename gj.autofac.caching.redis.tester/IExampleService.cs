@@ -13,5 +13,4 @@ public interface IExampleService
     Task AsyncActionTest(int id);
     [RedisCache(60)]
     int SynchronousTaskTest();
-    
 }
