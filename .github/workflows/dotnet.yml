@@ -33,7 +33,7 @@ jobs:
       uses: NuGet/setup-nuget@v1.0.5
     - name: Restore NuGet
       if: steps.cacheStep.outputs.cache-hit != 'true'
-      run: nuget restore Octane.sln
+      run: nuget restore autofac.caching.redis.sln.sln
     - name: Build
       run: dotnet build autofac.caching.redis/autofac.caching.redis.csproj --no-restore --configuration Release /p:Version=$Env:VERSION /p:AssemblyVersion=$Env:VERSION
     - name: Publish NuGet package
