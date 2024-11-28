@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
-using ILogger = Castle.Core.Logging.ILogger;
 
 namespace gj.autofac.caching.redis.tester;
 
