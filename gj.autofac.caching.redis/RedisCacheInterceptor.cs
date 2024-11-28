@@ -111,7 +111,6 @@ public class RedisCacheInterceptor(ILogger<RedisCacheInterceptor> logger) : IInt
         if (typeof(Task).IsAssignableFrom(invocation.Method.ReturnType))
         {
             // Create a Task<T> for cached async results
-            //var taskType = typeof(Task<>).MakeGenericType(returnType);
             var taskFromResultMethod = typeof(Task).GetMethod("FromResult")?.MakeGenericMethod(returnType);
             invocation.ReturnValue = taskFromResultMethod?.Invoke(null, new[] { value });
         }
@@ -130,7 +129,6 @@ public class RedisCacheInterceptor(ILogger<RedisCacheInterceptor> logger) : IInt
         invocation.Proceed();
 
         // Serialize and cache the result
-        //var serializedValue = JsonConvert.SerializeObject(invocation.ReturnValue);
         var serializedValue = BinaryFormatterUtils.SerializeToBinary(invocation.ReturnValue);
         _redis.StringSet(cacheKey, serializedValue, TimeSpan.FromSeconds(expirationSeconds));
         logger.LogDebug("[CACHE SET] {0}", cacheKey);
