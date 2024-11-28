@@ -16,7 +16,16 @@ public class RedisConnectionManager
         });
         configuration.GetSection("Redis").Bind(Config);
     }
-    
+
+    public RedisConnectionManager(RedisConfig config)
+    {
+        Config = config;
+        LazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+        {
+            var connectionString = !string.IsNullOrEmpty(Config.Password) ? $"{Config.Host}:{Config.Port},password={Config.Password}" : $"{Config.Host}:{Config.Port}";
+            return ConnectionMultiplexer.Connect(connectionString);
+        });
+    }
     private readonly Lazy<ConnectionMultiplexer> LazyConnection;
 
     public ConnectionMultiplexer Connection => LazyConnection.Value;
