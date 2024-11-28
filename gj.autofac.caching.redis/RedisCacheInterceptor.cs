@@ -28,9 +28,15 @@ public class RedisCacheInterceptor(ILogger<RedisCacheInterceptor> logger) : IInt
     {
         var returnType = invocation.Method.ReturnType;
         if (returnType == typeof(Task))
+        {
             return MethodType.AsyncAction;
+        }
+
         if (returnType.IsGenericType && returnType.GetGenericTypeDefinition() == typeof(Task<>))
+        {
             return MethodType.AsyncFunction;
+        }
+
         return MethodType.Synchronous;
     }
     

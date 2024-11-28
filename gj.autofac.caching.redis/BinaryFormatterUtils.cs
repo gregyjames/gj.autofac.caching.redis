@@ -11,7 +11,10 @@ public static class BinaryFormatterUtils
     /// <returns>The binary representation of the object.</returns>
     public static byte[] SerializeToBinary(object obj)
     {
-        if (obj == null) throw new ArgumentNullException(nameof(obj));
+        if (obj == null)
+        {
+            throw new ArgumentNullException(nameof(obj));
+        }
 
         // Serialize the object using MessagePack
         return MessagePackSerializer.Serialize(obj);
@@ -26,9 +29,14 @@ public static class BinaryFormatterUtils
     public static object DeserializeFromBinary(byte[] binaryData, Type type)
     {
         if (binaryData == null || binaryData.Length == 0)
+        {
             throw new ArgumentException("Binary data cannot be null or empty.", nameof(binaryData));
+        }
+
         if (type == null)
+        {
             throw new ArgumentNullException(nameof(type));
+        }
 
         // Deserialize the object using MessagePack
         return MessagePackSerializer.Deserialize(type, binaryData);
