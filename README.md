@@ -1,3 +1,7 @@
+[![.NET](https://github.com/gregyjames/gj.autofac.caching.redis/actions/workflows/dotnetci.yml/badge.svg)](https://github.com/gregyjames/gj.autofac.caching.redis/actions/workflows/dotnetci.yml)
+[![NuGet latest version](https://badgen.net/nuget/v/gj.autofac.caching.redis)](https://www.nuget.org/packages/gj.autofac.caching.redis)
+![NuGet Downloads](https://img.shields.io/nuget/dt/gj.autofac.caching.redis)
+
 # autofac.caching.redis
 Automatic function level caching using redis in C#.
 
