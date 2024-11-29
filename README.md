@@ -82,6 +82,9 @@ static class Program
     }
 }
 ```
+## Performance
+Testing was done using the `TaskObjectReturnTest()` test with and without caching.
+![image](chart.png)
 
 ## License
 MIT License
