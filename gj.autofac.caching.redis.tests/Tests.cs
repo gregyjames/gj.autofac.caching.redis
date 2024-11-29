@@ -109,8 +109,6 @@ public class Tests
     [Test]
     public void SyncFunctionTest()
     {
-        var id = 550;
-
         try
         {
             for (int i = 0; i < LoopCount; i++)
@@ -129,5 +127,16 @@ public class Tests
     {
         var value = _database.StringGet("THIS_KEY_DOESNT_EXIST");
         Assert.IsFalse(value.HasValue);
+    }
+
+    [Test]
+    public async Task TaskObjectReturnTest()
+    {
+        for (var i = 1; i < LoopCount; i++)
+        {
+            var item = await _service.GetWeather(8, _logger);
+            Assert.IsNotNull(item);
+            _logger.LogInformation("{0} - {1} done.", i, item.Title);
+        }
     }
 }
