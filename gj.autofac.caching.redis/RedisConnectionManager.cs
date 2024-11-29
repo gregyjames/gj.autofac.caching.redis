@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
 
 namespace gj.autofac.caching.redis;
@@ -25,7 +25,6 @@ public class RedisConnectionManager
     /// Redis connection manager constructor
     /// </summary>
     /// <param name="config">The ResdisConfig object with settings defined</param>
-
     public RedisConnectionManager(RedisConfig config)
     {
         Config = config;
