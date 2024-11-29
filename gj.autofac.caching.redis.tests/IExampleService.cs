@@ -13,4 +13,7 @@ public interface IExampleService
     bool SynchronousTaskTest();
     [RedisCache(180)]
     public Task<TestData> GetWeather(int number, ILogger logger);
+
+    [RedisCache(1, "Expiery")]
+    public string ExpiryTest();
 }

@@ -31,4 +31,9 @@ public class ExampleService : IExampleService
         var obj = await client.GetFromJsonAsync<TestData>(url);
         return obj;
     }
+
+    public string ExpiryTest()
+    {
+        return "VALUE";
+    }
 }

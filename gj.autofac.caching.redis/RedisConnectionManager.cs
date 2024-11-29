@@ -6,6 +6,11 @@ namespace gj.autofac.caching.redis;
 public class RedisConnectionManager
 {
     public RedisConfig Config { get; set; } = new();
+    
+    /// <summary>
+    /// Redis connection manager constructor
+    /// </summary>
+    /// <param name="configuration">IConfiguration object from Microsoft.Extensions.Configuraiton</param>
     public RedisConnectionManager(IConfiguration configuration)
     {
         _lazyConnection = new Lazy<IConnectionMultiplexer>(() =>
@@ -15,6 +20,11 @@ public class RedisConnectionManager
         });
         configuration.GetSection("Redis").Bind(Config);
     }
+    
+    /// <summary>
+    /// Redis connection manager constructor
+    /// </summary>
+    /// <param name="config">The ResdisConfig object with settings defined</param>
 
     public RedisConnectionManager(RedisConfig config)
     {
@@ -26,6 +36,10 @@ public class RedisConnectionManager
         });
     }
 
+    /// <summary>
+    /// For use with an existing Redis IConnectionMultiplexer
+    /// </summary>
+    /// <param name="connectionMultiplexer"></param>
     public RedisConnectionManager(IConnectionMultiplexer connectionMultiplexer)
     {
         _lazyConnection = new Lazy<IConnectionMultiplexer>(() => connectionMultiplexer);

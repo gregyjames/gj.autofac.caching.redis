@@ -139,4 +139,13 @@ public class Tests
             _logger.LogInformation("{0} - {1} done.", i, item.Title);
         }
     }
+    
+    [Test]
+    public void AttributeExpiredTest()
+    {
+        _service.ExpiryTest();
+        Thread.Sleep(3500);
+        var value = _database.StringGet("Expiery");
+        Assert.That(value.HasValue, Is.False);
+    }
 }
