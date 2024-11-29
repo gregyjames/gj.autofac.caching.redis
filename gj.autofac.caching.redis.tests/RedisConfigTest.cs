@@ -25,8 +25,6 @@ public class RedisConfigTest
         configuration = new ConfigurationBuilder()
             .AddJsonStream(stream)
             .Build();
-        
-
     }
     
     [Test]
