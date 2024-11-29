@@ -14,14 +14,16 @@ namespace gj.autofac.caching.redis.tests;
 public class Tests
 {
     private IDatabase _database;
-    private IExampleService service;
-    private ILogger<ExampleService> logger;
-
+    private IExampleService _service;
+    private ILogger<ExampleService> _logger;
+    
+    private const int LoopCount = 15;
+    
     [SetUp]
     public void Setup()
     {
-        IConnectionMultiplexer _connection = new MockMultiplexer();
-        _database = _connection.GetDatabase();
+        IConnectionMultiplexer connection = new MockMultiplexer();
+        _database = connection.GetDatabase();
         
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Verbose()
@@ -36,14 +38,11 @@ public class Tests
         });
         
         var builder = new ContainerBuilder();
-       
-        //Either make sure IConfiguration or RedisConfig is registered.
-        //services.AddSingleton<IConfiguration>(configuration);
         
         builder.Populate(services);
         
         //Register the Redis Connection as single instance
-        builder.Register<IConnectionMultiplexer>(builder => new MockMultiplexer()).As<IConnectionMultiplexer>();
+        builder.Register<IConnectionMultiplexer>(_ => new MockMultiplexer()).As<IConnectionMultiplexer>();
         
         builder.RegisterType<RedisConnectionManager>().SingleInstance();
         
@@ -56,10 +55,10 @@ public class Tests
 
         var container = builder.Build();
         
-        service = container.Resolve<IExampleService>();
-        logger = container.Resolve<ILogger<ExampleService>>();
+        _service = container.Resolve<IExampleService>();
+        _logger = container.Resolve<ILogger<ExampleService>>();
         
-        logger.LogInformation("Tests started...");
+        _logger.LogInformation("Tests started...");
     }
 
     static void TimeAndRun(Action action, Microsoft.Extensions.Logging.ILogger logger)
@@ -85,9 +84,9 @@ public class Tests
 
         try
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < LoopCount; i++)
             {
-                TimeAndRun(async () => await service.AsyncFunctionTest(id), logger);
+                TimeAndRun(async () => await _service.AsyncFunctionTest(id), _logger);
             }
         }
         finally
@@ -101,9 +100,9 @@ public class Tests
     {
         var id = 607;
         
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < LoopCount; i++)
         {
-            TimeAndRun(async () => await service.AsyncActionTest(id), logger);
+            TimeAndRun(async () => await _service.AsyncActionTest(id), _logger);
         }
     }
     
@@ -114,9 +113,9 @@ public class Tests
 
         try
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < LoopCount; i++)
             {
-                TimeAndRun(() => service.SynchronousTaskTest(), logger);
+                TimeAndRun(() => _service.SynchronousTaskTest(), _logger);
             }
         }
         finally
