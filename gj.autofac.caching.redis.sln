@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gj.autofac.caching.redis", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gj.autofac.caching.redis.tester", "gj.autofac.caching.redis.tester\gj.autofac.caching.redis.tester.csproj", "{1FCEC74F-35BF-4B6B-9532-5916D0FC76C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gj.autofac.caching.redis.tests", "gj.autofac.caching.redis.tests\gj.autofac.caching.redis.tests.csproj", "{2241D8D6-0F87-49EE-B8BE-763BDE77AF82}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{1FCEC74F-35BF-4B6B-9532-5916D0FC76C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FCEC74F-35BF-4B6B-9532-5916D0FC76C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FCEC74F-35BF-4B6B-9532-5916D0FC76C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2241D8D6-0F87-49EE-B8BE-763BDE77AF82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2241D8D6-0F87-49EE-B8BE-763BDE77AF82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2241D8D6-0F87-49EE-B8BE-763BDE77AF82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2241D8D6-0F87-49EE-B8BE-763BDE77AF82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
