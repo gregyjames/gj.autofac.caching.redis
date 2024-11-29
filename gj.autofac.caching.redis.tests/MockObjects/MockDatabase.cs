@@ -1715,7 +1715,7 @@ namespace gj.autofac.caching.redis.tests.MockObjects
 
         public byte[] KeyDump(RedisKey key, CommandFlags flags = CommandFlags.None)
         {
-            return new Byte[] { };
+            return Array.Empty<byte>();
         }
 
         public string? KeyEncoding(RedisKey key, CommandFlags flags = CommandFlags.None)
