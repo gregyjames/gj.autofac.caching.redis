@@ -74,7 +74,7 @@ public class Tests
     {
         _database.StringSet("TEST", "VALUE");
         
-        Assert.IsTrue(_database.StringGet("TEST") == "VALUE");
+        Assert.That(_database.StringGet("TEST") == "VALUE", Is.True);
     }
 
     [Test]
@@ -91,7 +91,7 @@ public class Tests
         }
         finally
         {
-            Assert.IsTrue(_database.StringGet("Async").HasValue);
+            Assert.That(_database.StringGet("Async").HasValue, Is.True);
         }
     }
     
@@ -118,7 +118,7 @@ public class Tests
         }
         finally
         {
-            Assert.IsTrue(_database.StringGet("Sync").HasValue);
+            Assert.That(_database.StringGet("Sync").HasValue, Is.True);
         }
     }
 
@@ -126,7 +126,7 @@ public class Tests
     public void KeyNotFoundTest()
     {
         var value = _database.StringGet("THIS_KEY_DOESNT_EXIST");
-        Assert.IsFalse(value.HasValue);
+        Assert.That(value.HasValue, Is.False);
     }
 
     [Test]
@@ -135,7 +135,7 @@ public class Tests
         for (var i = 1; i < LoopCount; i++)
         {
             var item = await _service.GetWeather(8, _logger);
-            Assert.IsNotNull(item);
+            Assert.That(item, Is.Not.Null);
             _logger.LogInformation("{0} - {1} done.", i, item.Title);
         }
     }

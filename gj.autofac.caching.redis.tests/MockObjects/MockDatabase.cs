@@ -461,7 +461,6 @@ namespace gj.autofac.caching.redis.tests.MockObjects
                         : ObjectCache.InfiniteAbsoluteExpiration
                 };
                 var value = _cache.Get(key.ToString());
-                Assert.IsTrue(value != null, nameof(value) + " != null");
                 _cache.Set(key.ToString(), value, policy);
                 return await Task.FromResult(true);
             }
