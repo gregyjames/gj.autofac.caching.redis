@@ -2583,7 +2583,6 @@ namespace gj.autofac.caching.redis.tests.MockObjects
             };
             _cache.Set(key.ToString(), value, policy);
             return value;
-
         }
 
         public RedisValue StringGetSetExpiry(RedisKey key, TimeSpan? expiry, CommandFlags flags = CommandFlags.None)
