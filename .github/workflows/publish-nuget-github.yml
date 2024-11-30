@@ -39,7 +39,7 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Add source
-        run: dotnet nuget add source --username gregyjames --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/gj.autofac.caching.redis/index.json"
+        run: dotnet nuget add source --username gregyjames --password ${{ secrets.GH_PAT }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/gregyjames/index.json"
       
       - name: Restore dependencies
         run: dotnet restore
@@ -51,6 +51,6 @@ jobs:
         run: dotnet pack --configuration Release --no-build --output ./output /p:Version=${{ env.VERSION }}
 
       - name: Publish to GitHub Packages
-        run: dotnet nuget push ./output/*.nupkg --source "github" --api-key "${{ secrets.GITHUB_TOKEN }}"
+        run: dotnet nuget push ./output/*.nupkg --source "github" --api-key "${{ secrets.GH_PAT }}"
         env:
           NUGET_CREDENTIALPROVIDER_SESSIONTOKENCACHE_ENABLED: "true"
