@@ -10,7 +10,7 @@
         <Authors>Greg James</Authors>
         <Copyright>2024, Greg James</Copyright>
         <Description>Automatic function level caching using redis in C#.</Description>
-        <RepositoryUrl>https://github.com/gregyjames/autofac.caching.redis</RepositoryUrl>
+        <RepositoryUrl>https://github.com/gregyjames/gj.autofac.caching.redis</RepositoryUrl>
         <PackageTags>c-sharp redis cache caching functions async</PackageTags>
         <AssemblyVersion>1.0.0</AssemblyVersion>
         <PackageId>gj.autofac.caching.redis</PackageId>
