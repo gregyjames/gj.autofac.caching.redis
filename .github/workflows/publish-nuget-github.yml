@@ -1,10 +1,14 @@
-name: Publish NuGet Package To Github
+name: Publish NuGet Package To GitHub
 
 on:
   push:
     tags:
       - 'v*.*.*' # Specify the tag pattern, e.g., 'v1.0.0'
   workflow_dispatch:  # Allows manual triggering of the workflow
+    inputs:
+      version:
+        description: 'Version to publish (e.g., 1.0.0)'
+        required: false
 
 jobs:
   publish:
@@ -19,24 +23,34 @@ jobs:
         with:
           dotnet-version: 8.x  # Adjust based on your project's .NET version
 
+      - name: Determine Version
+        id: determine_version
+        run: |
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            VERSION=${GITHUB_REF##*/}
+            VERSION=${VERSION#v}
+          else
+            VERSION=${{ inputs.version }}
+          fi
+          if [[ -z "$VERSION" ]]; then
+            echo "Version is required for manual runs. Exiting."
+            exit 1
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
       - name: Add source
         run: dotnet nuget add source --username gregyjames --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/gj.autofac.caching.redis/index.json"
-      
-      - name: Set VERSION variable from tag
-        run: |
-          $VERSION=$Env:GITHUB_REF_NAME.TrimStart("v")
-          echo "VERSION=$VERSION" >> $Env:GITHUB_ENV
       
       - name: Restore dependencies
         run: dotnet restore
 
       - name: Build project
-        run: dotnet build --no-restore --configuration Release /p:Version=$Env:VERSION /p:AssemblyVersion=$Env:VERSION
+        run: dotnet build --no-restore --configuration Release /p:Version=${{ env.VERSION }} /p:AssemblyVersion=${{ env.VERSION }}
 
       - name: Pack NuGet package
-        run: dotnet pack --configuration Release --no-build --output ./output
+        run: dotnet pack --configuration Release --no-build --output ./output /p:Version=${{ env.VERSION }}
 
       - name: Publish to GitHub Packages
-        run: dotnet nuget push **/*.nupkg --source "github" --api-key "${{ secrets.GITHUB_TOKEN }}"
+        run: dotnet nuget push ./output/*.nupkg --source "github" --api-key "${{ secrets.GITHUB_TOKEN }}"
         env:
           NUGET_CREDENTIALPROVIDER_SESSIONTOKENCACHE_ENABLED: "true"
