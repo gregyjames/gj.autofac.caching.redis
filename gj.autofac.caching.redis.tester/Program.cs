@@ -2,6 +2,8 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Autofac.Extras.DynamicProxy;
+using gj.autofac.caching.redis.Serialization;
+using MessagePack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -45,6 +47,8 @@ static class Program
         
         builder.Populate(services);
 
+        builder.RegisterType<MessagePackObjectSerializer>().As<IObjectSerializer>();
+        
         //Register the Redis Connection as single instance
         builder.RegisterType<RedisConnectionManager>().SingleInstance();
         
@@ -59,7 +63,7 @@ static class Program
         var service = container.Resolve<IExampleService>();
         var logger = container.Resolve<ILogger<ExampleService>>();
         
-        var id = 3;
+        var id = 16;
 
         for (var i = 0; i < 5; i++)
         {
@@ -67,7 +71,7 @@ static class Program
         }
         for (var i = 0; i < 5; i++)
         {
-            TimeAndRun(async () => await service.AsyncActionTest(50), logger);
+            TimeAndRun(async () => await service.AsyncActionTest(id), logger);
         }
         for (var i = 0; i < 5; i++)
         {

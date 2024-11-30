@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Autofac.Extras.DynamicProxy;
+using gj.autofac.caching.redis.Serialization;
 using gj.autofac.caching.redis.tests.MockObjects;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -43,6 +44,8 @@ public class Tests
         
         //Register the Redis Connection as single instance
         builder.Register<IConnectionMultiplexer>(_ => new MockMultiplexer()).As<IConnectionMultiplexer>();
+
+        builder.RegisterType<MessagePackObjectSerializer>().As<IObjectSerializer>();
         
         builder.RegisterType<RedisConnectionManager>().SingleInstance();
         

@@ -1,15 +1,13 @@
-using MessagePack;
+namespace gj.autofac.caching.redis.Serialization;
 
-namespace gj.autofac.caching.redis;
-
-internal static class BinaryFormatterUtils
+public class MessagePackObjectSerializer: IObjectSerializer
 {
     /// <summary>
     /// Serializes an object to binary using MessagePack.
     /// </summary>
     /// <param name="obj">The object to serialize.</param>
     /// <returns>The binary representation of the object.</returns>
-    internal static byte[] SerializeToBinary(object? obj)
+    public byte[] SerializeToBinary(object? obj)
     {
         if (obj == null)
         {
@@ -17,7 +15,7 @@ internal static class BinaryFormatterUtils
         }
 
         // Serialize the object using MessagePack
-        return MessagePackSerializer.Serialize(obj);
+        return MessagePack.MessagePackSerializer.Serialize(obj);
     }
 
     /// <summary>
@@ -26,7 +24,7 @@ internal static class BinaryFormatterUtils
     /// <param name="binaryData">The binary data to deserialize.</param>
     /// <param name="type">The type to deserialize into.</param>
     /// <returns>The deserialized object.</returns>
-    internal static object? DeserializeFromBinary(byte[] binaryData, Type type)
+    public object? DeserializeFromBinary(byte[] binaryData, Type type)
     {
         if (binaryData == null || binaryData.Length == 0)
         {
@@ -39,6 +37,6 @@ internal static class BinaryFormatterUtils
         }
 
         // Deserialize the object using MessagePack
-        return MessagePackSerializer.Deserialize(type, binaryData);
+        return MessagePack.MessagePackSerializer.Deserialize(type, binaryData);
     }
 }
