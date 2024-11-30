@@ -57,6 +57,9 @@ static class Program
         
         builder.Populate(services);
 
+        //Register an object Serializer to use
+        builder.RegisterType<MessagePackObjectSerializer>().As<IObjectSerializer>();
+        
         //Register the Redis Connection as single instance
         builder.RegisterType<RedisConnectionManager>().SingleInstance();
         

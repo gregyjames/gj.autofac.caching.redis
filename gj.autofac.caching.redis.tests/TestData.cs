@@ -4,6 +4,7 @@ using MessagePack;
 namespace gj.autofac.caching.redis.tests;
 
 [MessagePackObject(keyAsPropertyName: true)]
+[Serializable]
 public class TestData
 {
     [JsonPropertyName("userId")]

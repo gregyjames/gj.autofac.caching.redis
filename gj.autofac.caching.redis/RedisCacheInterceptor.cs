@@ -1,11 +1,12 @@
 using System.Reflection;
 using Castle.DynamicProxy;
+using gj.autofac.caching.redis.Serialization;
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 
 namespace gj.autofac.caching.redis;
 
-public class RedisCacheInterceptor(ILogger<RedisCacheInterceptor> logger, RedisConnectionManager manager) : IInterceptor
+public class RedisCacheInterceptor(ILogger<RedisCacheInterceptor> logger, RedisConnectionManager manager, IObjectSerializer serializer) : IInterceptor
 {
     private readonly IDatabase _redis = manager.Database; // Ensure this is properly initialized elsewhere
 
@@ -96,10 +97,10 @@ public class RedisCacheInterceptor(ILogger<RedisCacheInterceptor> logger, RedisC
         }
     }
     
-    private static void SetReturnValue(IInvocation invocation, RedisValue cachedValue, Type returnType)
+    private void SetReturnValue(IInvocation invocation, RedisValue cachedValue, Type returnType)
     {
         // Deserialize using the provided returnType
-        var value = BinaryFormatterUtils.DeserializeFromBinary(cachedValue!, returnType);
+        var value = serializer.DeserializeFromBinary(cachedValue!, returnType);
 
         if (typeof(Task).IsAssignableFrom(invocation.Method.ReturnType))
         {
@@ -122,7 +123,7 @@ public class RedisCacheInterceptor(ILogger<RedisCacheInterceptor> logger, RedisC
         invocation.Proceed();
 
         // Serialize and cache the result
-        var serializedValue = BinaryFormatterUtils.SerializeToBinary(invocation.ReturnValue);
+        var serializedValue = serializer.SerializeToBinary(invocation.ReturnValue);
         _redis.StringSet(cacheKey, serializedValue, TimeSpan.FromSeconds(expirationSeconds));
         logger.LogDebug("[CACHE SET] {0}", cacheKey);
     }
@@ -145,7 +146,7 @@ public class RedisCacheInterceptor(ILogger<RedisCacheInterceptor> logger, RedisC
             var resultProperty = task.GetType().GetProperty("Result");
             var taskValue = resultProperty?.GetValue(task);
 
-            var serializedValue = BinaryFormatterUtils.SerializeToBinary(taskValue);
+            var serializedValue = serializer.SerializeToBinary(taskValue);
             await _redis.StringSetAsync(cacheKey, serializedValue, TimeSpan.FromSeconds(expirationSeconds));
 
             logger.LogDebug("[CACHE SET] {0}", cacheKey);
