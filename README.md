@@ -7,6 +7,11 @@
 # autofac.caching.redis
 Automatic function level caching using redis in C#.
 
+## How it works
+![image](Diagram.png)
+1. Upon initial request, the Proxy sends the request to the implementation then stores the value in Redis.
+2. While the key hasn't expired, the Proxy will retrieve function values from Redis instead of recalculating function values.
+
 ## Usage
 A full example can be found in the 	[gj.autofac.caching.redis.tester](https://github.com/gregyjames/gj.autofac.caching.redis/tree/main/gj.autofac.caching.redis.tester "gj.autofac.caching.redis.tester") directory.
 ```csharp
