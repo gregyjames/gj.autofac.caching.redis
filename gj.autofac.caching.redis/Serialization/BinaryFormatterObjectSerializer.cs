@@ -8,7 +8,9 @@ public class BinaryFormatterObjectSerializer: IObjectSerializer
     public byte[] SerializeToBinary(object? obj)
     {
         if (obj == null)
+        {
             return [];
+        }
 
         var bf = new BinaryFormatter();
         using var ms = new MemoryStream();
@@ -20,8 +22,10 @@ public class BinaryFormatterObjectSerializer: IObjectSerializer
     public object? DeserializeFromBinary(byte[] binaryData, Type type)
     {
         if (binaryData.Length == 0)
+        {
             return default;
-        
+        }
+
         BinaryFormatter bf = new BinaryFormatter();
         using MemoryStream ms = new MemoryStream(binaryData);
         return bf.Deserialize(ms);

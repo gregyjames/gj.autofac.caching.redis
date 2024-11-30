@@ -13,7 +13,7 @@ public class MessagePackObjectSerializerTest
     [SetUp]
     public void Setup()
     {
-        _data = new TestData()
+        _data = new TestData
         {
             Id = 8,
             UserId = 8,
