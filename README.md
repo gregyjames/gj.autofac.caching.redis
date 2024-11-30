@@ -7,6 +7,9 @@
 # autofac.caching.redis
 Automatic function level caching using redis in C#.
 
+## How it works
+![image](Diagram.png)
+
 ## Usage
 A full example can be found in the 	[gj.autofac.caching.redis.tester](https://github.com/gregyjames/gj.autofac.caching.redis/tree/main/gj.autofac.caching.redis.tester "gj.autofac.caching.redis.tester") directory.
 ```csharp
