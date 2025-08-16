@@ -29,6 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Autofac" Version="8.4.0" />
         <None Include="docs\README.md" Pack="true" PackagePath="\" />
         <None Include="docs\LICENSE.md" Pack="true" PackagePath="\" />
         <None Include="docs\icons8-redis-an-in-memory-data-structure-project-implementing-a-distributed-96.png" Pack="true" PackagePath="\">
